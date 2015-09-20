@@ -1,5 +1,6 @@
 class UsersController < ApplicationController
-  before_action :set_user, only: [:show, :edit, :update, :destroy]
+  before_action :set_user, only: [:edit, :update, :show, :destroy]
+  before_action :correct_user, only: [:edit, :update]
 
   # GET /users
   # GET /users.json
@@ -28,6 +29,7 @@ class UsersController < ApplicationController
     file = params[:user][:image]
     @user.set_image(file)
       if @user.save
+        sign_in @user
         flash[:success] = "Welcome to Twitter!"
         redirect_to @user
       else
@@ -58,12 +60,25 @@ class UsersController < ApplicationController
 
   private
     # Use callbacks to share common setup or constraints between actions.
+    def user_params
+      params.require(:user).permit(:name, :email, :password, :password_confirmation)
+    end
+
+    # Before actions
+
     def set_user
       @user = User.find(params[:id])
     end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
-    def user_params
-      params.require(:user).permit(:name, :email, :password, :password_confirmation)
+    def signed_in_user
+      redirect_to signin_url, notice: "Please sign in." unless signed_in?
     end
+
+    def current_user
+      @user = User.find(params[:id])
+      redirect_to(root_path) unless current_user?(@user)
+    end
+
+    # Never trust parameters from the scary internet, only allow the white list through.
+    
 end
