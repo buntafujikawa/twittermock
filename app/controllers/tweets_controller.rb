@@ -31,7 +31,7 @@ class TweetsController < ApplicationController
         flash[:success] = "Tweet created!"
         redirect_to root_url
       else
-        @tweets = current_user.tweet.paginate(page: params[:page]);
+        @feed_tweets = current_user.tweet.paginate(page: params[:page])
         render 'about/index'
       end
   end
@@ -54,7 +54,7 @@ class TweetsController < ApplicationController
   # DELETE /tweets/1.json
   def destroy
     @tweet.destroy
-    respond_to root_url
+    redirect_to root_url
   end
 
   private
@@ -65,11 +65,11 @@ class TweetsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def tweet_params
-      params.require(:tweet).permit(:content, :user_id)
+      params.require(:tweet).permit(:content)
     end
 
     def correct_user
       @tweet = Tweet.find_by(id: params[:id])
-      redirect_to root_url unless current_user?(@tweet.user_id)
+      redirect_to root_url unless current_user?(@tweet.user)
     end
 end

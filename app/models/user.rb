@@ -9,7 +9,7 @@ class User < ActiveRecord::Base
     has_secure_password
     validates :password, length: { minimum:6 }
 
-    has_many :tweets
+    has_many :tweets, dependent: :destroy
 
     #だめだったら6.20で
 
