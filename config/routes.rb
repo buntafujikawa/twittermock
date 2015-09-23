@@ -5,7 +5,13 @@ Twitter::Application.routes.draw do
   match '/signin',  to: 'sessions#new',     via: 'get'
   get '/signout', to: 'sessions#destroy', via: 'delete'
 
-  resources :users
+  resources :users do
+  	member do
+  		get :following, :followers
+  	end
+  end
+
+  resources :relationships, only: [:create, :destroy]
   resources :tweets
   resources :sessions, only: [:new, :create, :destroy]
-  end
+ end

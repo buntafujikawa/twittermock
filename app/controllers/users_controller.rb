@@ -1,4 +1,5 @@
 class UsersController < ApplicationController
+  before_action :signed_in_user, only: [:edit, :update, :destroy]
   before_action :set_user, only: [:edit, :update, :show, :destroy]
   before_action :correct_user, only: [:edit, :update]
 
@@ -59,8 +60,24 @@ class UsersController < ApplicationController
     redirect_to users_url
   end
 
+  def following
+    @title = "Following"
+    @user = User.find(params[:id])
+    @users = @user.followings.paginate(page: params[:page])
+     render 'show_follow'
+  end
+
+   def followers
+     @title = "Followers"
+     @user = User.find(params[:id])
+     @users = @user.followers.paginate(page: params[:page])
+      render 'show_follow'
+   end
+
   private
     # Use callbacks to share common setup or constraints between actions.
+    #もしかしたらいらないかもしれない
+    #githubのやつにはなかった
     def user_params
       params.require(:user).permit(:name, :email, :password, :password_confirmation)
     end
@@ -71,12 +88,12 @@ class UsersController < ApplicationController
       @user = User.find(params[:id])
     end
 
-    
-
     def current_user
       @user = User.find(params[:id])
       redirect_to(root_path) unless current_user?(@user)
     end
+
+    
 
     # Never trust parameters from the scary internet, only allow the white list through.
     
