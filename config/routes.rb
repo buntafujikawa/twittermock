@@ -10,12 +10,21 @@ Twitter::Application.routes.draw do
 
   resources :users do
   	member do
-  		get :following, :followers
+  		get :following, :followers, :favorite
   	end
   end
 
+  resources :tweets do
+  	member do
+  		get :favorites
+  		# /tweets/:id/reply
+  		post :reply
+  	end
+  end
+
+
   resources :relationships, only: [:create, :destroy]
-  resources :tweets
   resources :sessions, only: [:new, :create, :destroy]
+  resources :favorites, only: [:create, :destroy]
   #resources :microposts, only: [:create, :destroy]
  end

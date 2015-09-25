@@ -2,7 +2,7 @@ class User < ActiveRecord::Base
 	before_save { self.email = email.downcase }
     before_create :create_remember_token
 	validates :name, presence:true, length: {maximum: 50}
-	 VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i
+	VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i
 	validates :email, presence: true,
 	                  format: { with: VALID_EMAIL_REGEX },
 	                  uniqueness: true
@@ -18,6 +18,10 @@ class User < ActiveRecord::Base
     has_many :follower_relationships, foreign_key: "following_id", class_name: "Relationship", dependent: :destroy
     has_many :followers, through: :follower_relationships
 
+    #お気に入り
+    has_many :favorites
+    has_many :favorite_tweets, through: :favorites, source: :tweet
+
     #フォローしているか
     def following?(other_user)
         following_relationships.find_by(following_id: other_user.id)
@@ -31,9 +35,24 @@ class User < ActiveRecord::Base
         following_relationships.find_by(following_id: other_user.id).destroy
     end
 
+
     def feed
         Tweet.from_users_followed_by(self)
     end
+
+
+    def favorite?(tweet)
+        favorites.find_by(tweet_id: tweet.id)
+    end
+
+    def favorite!(tweet)
+        favorites.create!(tweet_id: tweet.id)
+    end
+
+    def unfavorite!(tweet)
+        favorites.find_by(tweet_id: tweet.id).destroy
+    end
+
 
 
 

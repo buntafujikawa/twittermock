@@ -57,6 +57,18 @@ class TweetsController < ApplicationController
     redirect_to root_url
   end
 
+  def reply
+    @tweet = current_user.tweets.build(content: params[:tweet][:content])
+    @tweet.reply_to = params[:id]
+    if @tweet.save
+      flash[:success] = "Tweet created!"
+      redirect_to root_url
+    else
+      @tweets = current_user.tweets.paginate(page: params[:page])
+      render 'about/index'
+    end
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_tweet

@@ -67,12 +67,19 @@ class UsersController < ApplicationController
      render 'show_follow'
   end
 
-   def followers
+  def followers
      @title = "Followers"
      @user = User.find(params[:id])
      @users = @user.followers.paginate(page: params[:page])
       render 'show_follow'
-   end
+  end
+
+  def favorite
+    @title = 'Favorite Tweets'
+    @tweet = current_user.tweets.build
+    @feed_tweets = current_user.favorite_tweets.paginate(page: params[:page])
+    render template: 'about/index'
+  end
 
   private
     # Use callbacks to share common setup or constraints between actions.
@@ -88,13 +95,9 @@ class UsersController < ApplicationController
       @user = User.find(params[:id])
     end
 
-    def current_user
+    def correct_user
       @user = User.find(params[:id])
       redirect_to(root_path) unless current_user?(@user)
     end
-
-    
-
     # Never trust parameters from the scary internet, only allow the white list through.
-    
 end
