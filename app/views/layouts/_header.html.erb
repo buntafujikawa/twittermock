@@ -1,9 +1,23 @@
 <header class="navbar navbar-fixed-top navbar-inverse">
   <div class="navbar-inner">
     <div class="container">
-      <%= link_to root_path, id: "logo" do %>
-        <i class="fa fa-twitter"></i>
-      <% end %>
+      <nav>
+        <ul class="nav pull-left">
+          <li>
+            <%= link_to root_path, id: "logo" do %>
+              <i class="fa fa-twitter"></i>
+          <% end %>
+          </li>
+          <li>
+            <%= form_tag search_path, method: :get do %>
+              <div class="search-input">
+                <%= text_field_tag :word, '',size: '80' %>
+              </div>
+              <button type="submit"><i class="fa fa-search"></i></button>
+            <% end %>
+          </li>
+        </ul>
+      </nav>
       <nav>
         <ul class="nav pull-right">
           <% if signed_in? %>
@@ -13,11 +27,11 @@
                 Account <b class="caret"></b>
               </a>
               <ul class="dropdown-menu">
-                <li><%= link_to "Profile", current_user %></li>
-                <li><%= link_to "Settings", edit_user_path(current_user) %></li>
+                <li><%= link_to "Profile",current_user %></li>
+                <li><%= link_to "Settings",edit_user_path(current_user) %></li>
                 <li class="divider"></li>
                 <li>
-                  <%= link_to "Sign out", signout_path %>
+                  <%= link_to "Sign out", signout_path, method: "delete" %>
                 </li>
               </ul>
             </li>
