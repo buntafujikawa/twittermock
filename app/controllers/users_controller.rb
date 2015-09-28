@@ -22,6 +22,7 @@ class UsersController < ApplicationController
 
   # GET /users/1/edit
   def edit
+    @user = User.find(params[:id])
   end
 
   # POST /users
@@ -90,6 +91,13 @@ class UsersController < ApplicationController
     end
 
     # Before actions
+
+    def signed_in_user
+      unless signed_in?
+        store_location
+        redirect_to signin_url, notice: "Please sign in." unless signed_in?
+      end
+    end
 
     def set_user
       @user = User.find(params[:id])

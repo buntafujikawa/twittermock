@@ -1,7 +1,8 @@
 <%= form_for(@tweet) do |f| %>
   <%= render 'shared/error_messages', object: f.object %>
   <div class="field">
-    <%= f.text_area :content, placeholder: "Compose new tweet..." %>
+    <%= f.text_area :content, placeholder: "Compose new tweet...", onkeyup:"CountDownLength('cdlength1', value, 140);" %>
+     <p id="cdlength1">あと140文字</p>
   </div>
-  <%= f.submit "Post", class: "btn btn-large btn-primary" %>
+  <%= f.submit "Tweet", class: "btn btn-large btn-primary" %>
 <% end %>
