@@ -1,6 +1,4 @@
 Twitter::Application.routes.draw do
-  get 'search/index'
-
   root 'about#index'
   match '/about',   to: 'about#index',      via: 'get'
   match '/signup',  to: 'users#new',        via: 'get'
@@ -19,6 +17,7 @@ Twitter::Application.routes.draw do
   		get :favorites
   		# /tweets/:id/reply
   		post :reply
+      post :retweet
   	end
   end
 
@@ -26,5 +25,4 @@ Twitter::Application.routes.draw do
   resources :relationships, only: [:create, :destroy]
   resources :sessions, only: [:new, :create, :destroy]
   resources :favorites, only: [:create, :destroy]
-  #resources :microposts, only: [:create, :destroy]
  end

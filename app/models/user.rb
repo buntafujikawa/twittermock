@@ -7,7 +7,7 @@ class User < ActiveRecord::Base
 	                  format: { with: VALID_EMAIL_REGEX },
 	                  uniqueness: true
     has_secure_password
-    validates :password, length: { minimum:6 }
+    validates :password, length: { minimum:4 }
 
     has_many :tweets, dependent: :destroy
     #フォローしている
@@ -53,10 +53,6 @@ class User < ActiveRecord::Base
         favorites.find_by(tweet_id: tweet.id).destroy
     end
 
-
-
-
-    #だめだったら6.20で
 
     def set_image(file)
     	if !file.nil?

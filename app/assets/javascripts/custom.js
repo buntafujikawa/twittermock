@@ -1,6 +1,11 @@
 $(function(){
     $('.reply-btn').click(function(){
-        // siblingsは兄弟
         $(this).siblings('.reply').slideToggle();
+    });
+});
+
+$(function(){
+    $('.retweet-btn').click(function(){
+        $(this).siblings('.retweet').slideToggle();
     });
 });

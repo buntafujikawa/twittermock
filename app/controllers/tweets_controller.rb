@@ -31,8 +31,9 @@ class TweetsController < ApplicationController
         flash[:success] = "Tweet created!"
         redirect_to root_url
       else
-        @feed_tweets = current_user.tweet.paginate(page: params[:page])
-        render 'about/index'
+        #@feed_tweets = current_user.tweet
+        #render 'about/index'
+        redirect_to root_url
       end
   end
 
@@ -64,7 +65,20 @@ class TweetsController < ApplicationController
       flash[:success] = "Tweet created!"
       redirect_to root_url
     else
-      @tweets = current_user.tweets.paginate(page: params[:page])
+      redirect_to root_url
+      #@tweets = current_user.tweets
+      #render 'about/index'
+    end
+  end
+
+  def retweet
+    @tweet = current_user.tweets.build(content: params[:tweet][:content])
+    @tweet.retweet_to = params[:id]
+    if @tweet.save
+      flash[:success] = "Tweet created!"
+      redirect_to root_url
+    else
+      @tweets = current_user.tweets
       render 'about/index'
     end
   end

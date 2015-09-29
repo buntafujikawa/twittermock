@@ -12,7 +12,7 @@ class UsersController < ApplicationController
   # GET /users/1
   # GET /users/1.json
   def show
-    @tweets = @user.tweets.paginate(page: params[:page])
+    @tweets = @user.tweets
   end
 
   # GET /users/new
@@ -64,28 +64,26 @@ class UsersController < ApplicationController
   def following
     @title = "Following"
     @user = User.find(params[:id])
-    @users = @user.followings.paginate(page: params[:page])
+    @users = @user.followings
      render 'show_follow'
   end
 
   def followers
      @title = "Followers"
      @user = User.find(params[:id])
-     @users = @user.followers.paginate(page: params[:page])
+     @users = @user.followers
       render 'show_follow'
   end
 
   def favorite
     @title = 'Favorite Tweets'
     @tweet = current_user.tweets.build
-    @feed_tweets = current_user.favorite_tweets.paginate(page: params[:page])
+    @feed_tweets = current_user.favorite_tweets
     render template: 'about/index'
   end
 
   private
     # Use callbacks to share common setup or constraints between actions.
-    #もしかしたらいらないかもしれない
-    #githubのやつにはなかった
     def user_params
       params.require(:user).permit(:name, :email, :password, :password_confirmation)
     end
